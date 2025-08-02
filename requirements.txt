@@ -22,20 +22,28 @@ urllib3==2.5.0
 
 
 
+def appendData_xl(exel_path: str, label: str, result: dict, image_id: int) -> None:
+    
 
-headers = ["No", "Remarks"] + list(result.keys())
+    try:
+        
+        headers = ["No", "Remarks"] + list(result.keys())
         values = [image_id, label] + list(result.values())
 
 
         if not Path(exel_path).exists():
-            wb = workbook()
-            ws = wb.active()
+            wb = Workbook()
+            ws = wb.active
             ws.title = "mmmn_GroundTruth_datasets"
 
             for col, headers in enumerate(headers, start=1):
                 ws.cell(row=1, column=col).value = headers
+            
+            for col, val in enumerate(values, start=1):
+                ws.cell(row=1, column=col).value = val
 
             wb.save(exel_path)
+            return True
         
         wb = load_workbook(exel_path)
         ws = wb.active
@@ -53,3 +61,4 @@ headers = ["No", "Remarks"] + list(result.keys())
 
     except Exception as e:
         print(f"[ERROR] failed to save {e}")
+
